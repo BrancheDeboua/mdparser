@@ -7,7 +7,7 @@ import (
 )
 
 func Parse(md string) string {
-		var value string
+	var value string
 	for _, v := range strings.Split(md, "\n") {
 		if len(strings.TrimLeft(v, " ")) != 0 {
 			switch strings.TrimLeft(v, " ")[0] {
