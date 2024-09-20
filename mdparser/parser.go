@@ -25,10 +25,12 @@ func Parse(md string) string {
 				value += "<p>" + v + "</p>"
 			}
 
-			value = replaceAll(value, `\*\*(.*?)\*\*`, "<b>$1</b>")
-			value = replaceAll(value, `__(.*?)__`, "<b>$1</b>")
-			value = replaceAll(value, `\*(.*?)\*`, "<i>$1</i>")
-			value = replaceAll(value, `_(.*?)_`, "<i>$1</i>")
+			value = replaceAll(value, `\*\*\*(.*?)\*\*\*`, "<strong><em>$1</em></strong>")
+			value = replaceAll(value, `___(.*?)___`, "<strong><em>$1</em></strong>")
+			value = replaceAll(value, `\*\*(.*?)\*\*`, "<strong>$1</strong>")
+			value = replaceAll(value, `__(.*?)__`, "<strong>$1</strong>")
+			value = replaceAll(value, `\*(.*?)\*`, "<em>$1</em>")
+			value = replaceAll(value, `_(.*?)_`, "<em>$1</em>")
 			value = replaceAll(value, `\[(.*?)\]\((.*?)\)`, "<a href=\"$2\">$1</a>")
 
 			value += "\n"
