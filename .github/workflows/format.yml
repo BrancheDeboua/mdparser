@@ -1,4 +1,4 @@
-name: Testing
+name: Format
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  tests:
+  format:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
-      - name: Run tests
-        run: go test -v ./...
+      - name: Run gofmt
+        run: gofmt -s -w . && git diff --exit-code
