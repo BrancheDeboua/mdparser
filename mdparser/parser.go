@@ -6,31 +6,19 @@ import (
 	"strings"
 )
 
-type markdownParser struct {
-	lines []string
-}
-
-func newMarkdownParser() *markdownParser {
-	return &markdownParser{}
-}
-
-func (m *markdownParser) addLine(line string) {
-	m.lines = append(m.lines, line)
-}
-
-func (m *markdownParser) parse() string {
+func Parse(md string) string {
 	var value string
-	for _, v := range m.lines {
+	for _, v := range strings.Split(md, "\n") {
 		if len(strings.TrimLeft(v, " ")) != 0 {
 			switch strings.TrimLeft(v, " ")[0] {
 			case '#':
-				value += m.checkTitle(v)
+				value += checkTitle(v)
 			case '_':
-				value += m.checkLine(v, "_")
+				value += checkLine(v, "_")
 			case '-':
-				value += m.checkLine(v, "-")
+				value += checkLine(v, "-")
 			case '*':
-				value += m.checkLine(v, "*")
+				value += checkLine(v, "*")
 			case '>':
 				value += "<blockquote>" + v[1:] + "</blockquote>"
 			default:
@@ -49,7 +37,7 @@ func (m *markdownParser) parse() string {
 	return value
 }
 
-func (m *markdownParser) checkTitle(line string) string {
+func checkTitle(line string) string {
 	splits := strings.Split(strings.TrimLeft(line, " "), " ")
 	h := len(splits[0])
 
@@ -61,7 +49,7 @@ func (m *markdownParser) checkTitle(line string) string {
 	}
 }
 
-func (m *markdownParser) checkLine(line, delimiter string) string {
+func checkLine(line, delimiter string) string {
 	splits := strings.Fields(line)
 	h := len(splits[0])
 	if (len(splits) > 1 || len(strings.ReplaceAll(strings.Join(splits, ""), delimiter, "")) > 0) || h < 3 {
@@ -74,14 +62,4 @@ func (m *markdownParser) checkLine(line, delimiter string) string {
 func replaceAll(s, pattern, repl string) string {
 	re := regexp.MustCompile(pattern)
 	return re.ReplaceAllString(s, repl)
-}
-
-func Parse(md string) string {
-	mp := newMarkdownParser()
-
-	for _, v := range strings.Split(md, "\n") {
-		mp.addLine(v)
-	}
-
-	return mp.parse()
 }
