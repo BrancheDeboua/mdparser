@@ -5,3 +5,6 @@ vet: fmt
 
 fmt:
 	go fmt ./...
+
+test:
+	go test ./...
