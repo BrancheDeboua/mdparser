@@ -48,3 +48,8 @@ func TestParseParagraph(t *testing.T) {
 	// Test for simple paragraphs
 	runTest(t, "This is a paragraph.", "<p>This is a paragraph.</p>\n")
 }
+
+func TestParseCodeBlock(t *testing.T) {
+	// Test for code blocks
+	runTest(t, "```go\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}\n```", "<code class=\"language-go\"><pre>\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}\n</pre></code>\n")
+}

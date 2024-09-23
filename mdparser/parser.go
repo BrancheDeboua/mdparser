@@ -8,6 +8,7 @@ import (
 
 func Parse(md string) string {
 	var value string
+	codeBlock := false
 	for _, v := range strings.Split(md, "\n") {
 		if len(strings.TrimLeft(v, " ")) != 0 {
 			switch strings.TrimLeft(v, " ")[0] {
@@ -21,8 +22,21 @@ func Parse(md string) string {
 				value += checkLine(v, "*")
 			case '>':
 				value += "<blockquote>" + v[1:] + "</blockquote>"
+			case '`':
+				if strings.TrimLeft(v[:3], " ") == "```" {
+					if !codeBlock {
+						value += "<code class=\"language-" + v[3:] + "\"><pre>"
+					} else {
+						value += "</pre></code>"
+					}
+					codeBlock = !codeBlock
+				}
 			default:
-				value += "<p>" + v + "</p>"
+				if !codeBlock {
+					value += "<p>" + v + "</p>"
+				} else {
+					value += v
+				}
 			}
 
 			value = replaceAll(value, `\*\*\*(.*?)\*\*\*`, "<strong><em>$1</em></strong>")
