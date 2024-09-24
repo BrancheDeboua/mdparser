@@ -12,6 +12,10 @@ func runTest(t *testing.T, input, expected string) {
 	}
 }
 
+func TestParseCodeInline(t *testing.T) {
+	runTest(t, "`code`", "<p><code>code</code></p>\n")
+}
+
 func TestParseHeaders(t *testing.T) {
 	// Test for headers from H1 to H6
 	runTest(t, "# Header 1", "<h1>Header 1</h1>\n")
@@ -35,6 +39,22 @@ func TestParseBlockquote(t *testing.T) {
 func TestParseLinks(t *testing.T) {
 	// Test for parsing links
 	runTest(t, "[Go](https://golang.org)", "<p><a href=\"https://golang.org\">Go</a></p>\n")
+	runTest(t, "[Go](https://golang.org \"Optional\")", "<p><a href=\"https://golang.org\" title=\"Optional\">Go</a></p>\n")
+}
+
+func TestParseFormattedLinks(t *testing.T) {
+	// Test for formatted links
+	runTest(t, "*[Go](https://golang.org)*", "<p><em><a href=\"https://golang.org\">Go</a></em></p>\n")
+	runTest(t, "_[Go](https://golang.org)_", "<p><em><a href=\"https://golang.org\">Go</a></em></p>\n")
+	runTest(t, "**[Go](https://golang.org)**", "<p><strong><a href=\"https://golang.org\">Go</a></strong></p>\n")
+	runTest(t, "__[Go](https://golang.org)__", "<p><strong><a href=\"https://golang.org\">Go</a></strong></p>\n")
+	runTest(t, "***[Go](https://golang.org)***", "<p><strong><em><a href=\"https://golang.org\">Go</a></em></strong></p>\n")
+	runTest(t, "___[Go](https://golang.org)___", "<p><strong><em><a href=\"https://golang.org\">Go</a></em></strong></p>\n")
+}
+
+func TestParseImages(t *testing.T) {
+	runTest(t, "![Gopher](https://golang.org/doc/gopher/frontpage.png)", "<p><img src=\"https://golang.org/doc/gopher/frontpage.png\" alt=\"Gopher\" title=\"\"></p>\n")
+	runTest(t, "![Gopher](https://golang.org/doc/gopher/frontpage.png \"Optional\")", "<p><img src=\"https://golang.org/doc/gopher/frontpage.png\" alt=\"Gopher\" title=\"Optional\"></p>\n")
 }
 
 func TestParseHorizontalRules(t *testing.T) {
